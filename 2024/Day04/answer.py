@@ -42,8 +42,8 @@ mas_locations_centered_on_a = [
     if found["word"] == "MAS" and found["direction"][:8] == "Diagonal"
     ]
 
-potential_x_mas_location_count = {}
+count_diag_mas_at_location = {}
 for loc in mas_locations_centered_on_a:
-    potential_x_mas_location_count[loc] = potential_x_mas_location_count.get(loc,0) + 1
+    count_diag_mas_at_location[loc] = count_diag_mas_at_location.get(loc,0) + 1
 
-print("x-MAS count", len(dict(filter(lambda item: item[1] == 2, potential_x_mas_location_count.items()))), sep="\t")
+print("x-MAS count", len({loc: count for loc, count in count_diag_mas_at_location.items() if count == 2}), sep="\t")
