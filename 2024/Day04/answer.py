@@ -1,5 +1,3 @@
-import re
-
 with open("input.txt","r") as input_file:
     input_data = [list(string) for string in input_file.read().split("\n") if string]
 
@@ -9,7 +7,7 @@ search_directions = {
     "Straight_Left_Right":           (0,1),
     "Diagonal_TopLeft_BottomRight":  (1,1),
     "Straight_Top_Bottom":           (1,0),
-    "Diagonal_opRight_BottomLeft":  (1,-1),
+    "Diagonal_opRight_BottomLeft":   (1,-1),
     "Straight_Right_Left":           (0,-1),
     "Diagonal_BottomRight_TopLeft":  (-1,-1),
     "Straight_Bottom_Top":           (-1,0),
