@@ -8,25 +8,31 @@ predecessors = {}
 for bef,aft in sort_orders:
     predecessors.setdefault(aft,set()).add(bef)
 
-ordered_lists = []
-for lst in page_lists:
+processed_page_lists = []
+for page_list in page_lists:
     correct_order = True
-    for page_index,page in enumerate(lst):
-        if predecessors[page] & set(lst[page_index:]):
-            correct_order = False
-            new_order = lst[:page_index]
-            pages_to_sort = lst[page_index:]
-            while pages_to_sort:
-                found_pages = False
-                for pg_index, pg in enumerate(pages_to_sort):
-                    if not predecessors[pg] & set(pages_to_sort):
-                        new_order.append(pages_to_sort.pop(pg_index))
-                        found_pages = True
-                if not found_pages: raise Exception("Sort failure")
-            break
-    ordered_lists.append({"initial correct order": correct_order, "page list": lst if correct_order else new_order})
+    pages_to_sort = page_list.copy()
+    sorted_page_list = []
+    while pages_to_sort:
+        found_pages = False
+        for pg in pages_to_sort.copy():
+            if predecessors[pg] & set(pages_to_sort):
+                correct_order = False
+            else:
+                sorted_page_list.append(pages_to_sort.pop(pages_to_sort.index(pg)))
+                found_pages = True
+        if not found_pages: raise Exception("Sort failure")
+    processed_page_lists.append({"initially correct": correct_order, "page list": sorted_page_list})
 
 getMiddle = lambda lst: lst[int((len(lst))/2)]
 
-print(sum([int(getMiddle(lst["page list"])) for lst in ordered_lists if lst["initial correct order"]]))
-print(sum([int(getMiddle(lst["page list"])) for lst in ordered_lists if not lst["initial correct order"]]))
+print(
+    "Sum for ordered page-lists",
+    sum([int(getMiddle(lst["page list"])) for lst in processed_page_lists if lst["initially correct"]]),
+    sep="\t"
+    )
+print(
+    "Sum for fixed page-lists",
+    sum([int(getMiddle(lst["page list"])) for lst in processed_page_lists if not lst["initially correct"]]),
+    sep="\t"
+    )
