@@ -29,5 +29,5 @@ def sumCorrectEquations(equation_list, operations):
 operators_to_use = [lambda x,y:x+y, lambda x,y:x*y]
 print("Calibration result (part I)", sumCorrectEquations(calibration_equations, operators_to_use), sep="\t")
 
-operators_to_use.append(lambda x,y:int(str(x)+str(y)))
+operators_to_use = [lambda x,y:x+y, lambda x,y:x*y, lambda x,y:int(str(x)+str(y))]
 print("Calibration result (part II)", sumCorrectEquations(calibration_equations, operators_to_use), sep="\t")
