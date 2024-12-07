@@ -11,11 +11,10 @@ calibration_equations = [
     for line in input_data if ":" in line
     ]
 
-def getPossibleResults(num_list, operations):
-    operand = num_list.pop()
-    return {opr(result,operand) for opr in operations
-            for result in (getPossibleResults(num_list.copy(), operations) if len(num_list) > 1 else num_list)}
-
+def getPossibleResults(operands, operations):
+    current_operand = operands.pop()
+    return {opr(result,current_operand) for opr in operations
+            for result in (getPossibleResults(operands.copy(), operations) if len(operands) > 1 else operands)}
 
 def sumCorrectEquations(equation_list, operations):
     return sum(
