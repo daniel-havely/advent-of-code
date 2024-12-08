@@ -9,12 +9,13 @@ calibration_equations = [
         "operands": [int(num) for num in line.split(":")[1].strip().split() if num]
         }
     for line in input_data if ":" in line
-    ]
+]
 
 def getPossibleResults(operands, operations):
+    operands = operands.copy()
     current_operand = operands.pop()
     return {opr(result,current_operand) for opr in operations
-            for result in (getPossibleResults(operands.copy(), operations) if len(operands) > 1 else operands)}
+            for result in (getPossibleResults(operands, operations) if len(operands) > 1 else operands)}
 
 def sumCorrectEquations(equation_list, operations):
     return sum(
@@ -28,5 +29,5 @@ def sumCorrectEquations(equation_list, operations):
 operators_to_use = [lambda x,y:x+y, lambda x,y:x*y]
 print("Calibration result (part I)", sumCorrectEquations(calibration_equations, operators_to_use), sep="\t")
 
-operators_to_use = [lambda x,y:x+y, lambda x,y:x*y, lambda x,y:int(str(x)+str(y))]
+operators_to_use.append(lambda x,y:int(str(x)+str(y))) 
 print("Calibration result (part II)", sumCorrectEquations(calibration_equations, operators_to_use), sep="\t")
