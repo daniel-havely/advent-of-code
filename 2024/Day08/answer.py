@@ -31,8 +31,8 @@ for antenna_locations in antennae.values():
             ):
                 on_map = False
             
-print(len(resonant_antinodes))
-print(len(harmonic_antinodes))
+print("Resonant antinodes", len(resonant_antinodes), sep="\t")
+print("All harmonic antinodes", len(harmonic_antinodes), sep="\t")
         
 
 
