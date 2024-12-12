@@ -8,7 +8,7 @@ def countStonesAfterNthBlink(stone, number_of_blinks):
     else:
         try:
             return known_answers[(stone, number_of_blinks)]
-        except:
+        except KeyError:
             if stone == "0":
                 resulting_number_of_stones = countStonesAfterNthBlink("1", number_of_blinks -1)
             elif len(stone)%2 == 0:
