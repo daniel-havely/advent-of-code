@@ -1,6 +1,14 @@
 with open("input.txt","r") as input_file:
     input_data = input_file.read().split()
 
+def getStonesAfterBlink(stone):
+        if stone == "0":
+            return ["1"]
+        elif len(stone)%2 == 0:
+            return [stone[:len(stone)//2],stone[len(stone)//2:-1].lstrip("0")+stone[-1]]
+        else:
+            return [str(int(stone)*2024)]
+
 known_answers = {}
 def countStonesAfterNthBlink(stone, number_of_blinks):
     if number_of_blinks == 1:
@@ -9,17 +17,10 @@ def countStonesAfterNthBlink(stone, number_of_blinks):
         try:
             return known_answers[(stone, number_of_blinks)]
         except KeyError:
-            if stone == "0":
-                resulting_number_of_stones = countStonesAfterNthBlink("1", number_of_blinks -1)
-            elif len(stone)%2 == 0:
-                resulting_number_of_stones = (
-                    countStonesAfterNthBlink(stone[:len(stone)//2], number_of_blinks -1)
-                    +
-                    countStonesAfterNthBlink(stone[len(stone)//2:-1].lstrip("0")+stone[-1], number_of_blinks -1)
+            resulting_number_of_stones = sum(
+                countStonesAfterNthBlink(new_stone, number_of_blinks -1)
+                for new_stone in getStonesAfterBlink(stone)
                 )
-            else:
-                resulting_number_of_stones = countStonesAfterNthBlink(str(int(stone)*2024), number_of_blinks -1)
-            
             known_answers[(stone, number_of_blinks)] = resulting_number_of_stones
             return resulting_number_of_stones
                 
