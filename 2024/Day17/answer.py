@@ -1,5 +1,3 @@
-from tqdm import tqdm
-
 with open("input.txt","r") as input_file:
     input_data = input_file.readlines()
 
@@ -11,6 +9,17 @@ class Elf_Machine:
         self.register = {"A":0, "B":0, "C":0}
         self.instruction_pointer = 0
         self.output = []
+
+        self.process = {
+            0: self.adv,
+            1: self.bxl,
+            2: self.bst,
+            3: self.jnz,
+            4: self.bxc,
+            5: self.out,
+            6: self.bdv,
+            7: self.cdv
+        }
 
     def combo(self, operand):
         if operand < 4:
@@ -48,17 +57,6 @@ class Elf_Machine:
     def cdv(self, operand):
         self.register["C"] = int(self.register["A"]/pow(2,self.combo(operand)))
 
-    process = {
-        0: adv,
-        1: bxl,
-        2: bst,
-        3: jnz,
-        4: bxc,
-        5: out,
-        6: bdv,
-        7: cdv
-    }
-    
     def runProgram(self, program):
         self.instruction_pointer = 0
         while 0 <= self.instruction_pointer < len(program):
@@ -66,36 +64,35 @@ class Elf_Machine:
             self.instruction_pointer += 1
             operand = program[self.instruction_pointer]
             self.instruction_pointer += 1
-            Elf_Machine.process[opcode](self,operand)
+            self.process[opcode](operand)
     
     def printOutput(self):
         print(",".join(str(num) for num in self.output))
 
 
 machine = Elf_Machine()
-machine.register["A"] = stored_values["Register A"]
+for k,v in stored_values.items():
+    machine.register[k[-1]] = v
 machine.runProgram(program)
-machine.printOutput()
-print()
-
-# Each output number is only affected by two co-efficients, the last only by one.
-# So.. starting with the co-eff of the largest exponent and working backwards...
-try_number = (
-                    5*pow(8,15) + 3*pow(8,14) + 2*pow(8,13) + 5*pow(8,12) +
-                    3*pow(8,11) + 7*pow(8,10) + 6*pow(8,9) + 6*pow(8,8) + 
-                    4*pow(8,7) + 6*pow(8,6) + 2*pow( 8,5) + 3*pow(8,4) + 
-                    6*pow(8,3) + 0*pow(8,2) + 1*pow(8,1) + 7*pow(8,0)
-) #Yes! Worked out by hand changing one co-eff at a time:-(
-new_machine = Elf_Machine()
-new_machine.register["A"] = try_number
-new_machine.runProgram(program)
-new_machine.printOutput()
-print(",".join(str(num) for num in program))
-if new_machine.output == program:
-    print(try_number)
+print(f"{'Machine output:': <40}{','.join(str(num) for num in machine.output)}")
 
 
+def findByteAt(position, running_value=0):
+    for byte_value in range(8):
+        test_value = running_value + byte_value*pow(8, position)
+        machine = Elf_Machine()
+        machine.register["A"] = test_value
+        machine.runProgram(program)
+        if machine.output[position:] == program[position:]:
+            # print(f"{'pos:'}{pos}{'  byte:'}{byte}")
+            if position:
+                value = findByteAt(position-1, test_value)
+                if value is not None: return value
+            else:
+                return test_value
 
+print(f"{'Minimum value to replicate program:': <40}{findByteAt(len(program)-1)}")
+        
 
 
 
