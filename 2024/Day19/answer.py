@@ -10,22 +10,16 @@ designs_required = [string.strip() for string in design_string.splitlines()]
 memo = {}
 
 def matchTowelDesign(design):
-    combinations_found = 0
-    for towel in towels_available:
+    if design:
         try:
-            if towel == design[:len(towel)]:
-                remaining_design = design[len(towel):]
-                if not remaining_design:
-                    combinations_found += 1
-                else:
-                    try:
-                        combinations_found += memo[remaining_design]
-                    except KeyError:
-                        memo[remaining_design] = matchTowelDesign(remaining_design)
-                        combinations_found += memo[remaining_design]
-        except IndexError:
-            continue
-    return combinations_found
+            return memo[design]
+        except KeyError:
+            memo[design] = sum(
+                matchTowelDesign(design[:-len(towel)]) for towel in towels_available if design.endswith(towel)
+                )
+            return memo[design]
+    else:
+        return 1
 
 matched_designs = [matchTowelDesign(design) for design in tqdm(designs_required)]
 
