@@ -9,13 +9,13 @@ designs_required = [string.strip() for string in design_string.splitlines()]
 
 memo = {}
 
-def matchTowelDesign(design):
+def matchTowelDesign(design: str):
     if design:
         try:
             return memo[design]
         except KeyError:
             memo[design] = sum(
-                matchTowelDesign(design[:-len(towel)]) for towel in towels_available if design.endswith(towel)
+                matchTowelDesign(design[len(towel):]) for towel in towels_available if design.startswith(towel)
                 )
             return memo[design]
     else:
