@@ -13,16 +13,18 @@ def isFresh(id):
     else:
         fresh = False
     return fresh
+def countAllFresh():
+    number_of_ids = 0
+    current_id = 0
+    for first_id, last_id in fresh_ingredient_id_ranges:
+        if current_id >= last_id: continue
+        if current_id >= first_id: first_id = current_id + 1
+        number_of_ids += (last_id - first_id) + 1
+        current_id = last_id
+    return number_of_ids
 
 fresh_ingredient_ids = [id for id in available_ingredient_ids if isFresh(id)]
-
-count_fresh_ingredient_ids = 0
-current_id = 0
-for first_id, last_id in fresh_ingredient_id_ranges:
-    if current_id >= last_id: continue
-    if current_id >= first_id: first_id = current_id + 1
-    count_fresh_ingredient_ids += (last_id - first_id) + 1
-    current_id = last_id
+count_fresh_ingredient_ids = countAllFresh()
 
 answers = {}
 answers['How many of the available ingredient IDs are fresh?:'] = len(fresh_ingredient_ids)
