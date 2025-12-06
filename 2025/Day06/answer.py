@@ -16,7 +16,7 @@ while input_data_char_columns:
         problems_cephalopod_form.append(list())
     else:
         problems_cephalopod_form[-1].append(''.join(column[:-1]))
-    if column[-1] != ' ': problems_cephalopod_form[-1].append(column[-1])
+        if column[-1] != ' ': problems_cephalopod_form[-1].append(column[-1])
 solutions_cephalopod_form = \
     [operation(pr[-1])(list(map(int,pr[:-1]))) for pr in problems_cephalopod_form]
 
