@@ -3,23 +3,22 @@ import math
 with open("input.txt","r") as input_file:
     input_data =  input_file.readlines()
 
-
 operation = lambda x: math.prod if x == '*' else sum
 
 problems = [st for st in zip(*map(lambda x: x.split(),input_data))]
-solutions = [operation(y[-1])(list(map(int,y[:-1])))  for y in problems]
+solutions = [operation(pr[-1])(list(map(int,pr[:-1]))) for pr in problems]
 
 problems_cephalopod_form = []
-input_data_columns = [y for y in zip(*input_data)]
-while input_data_columns:
-    column = input_data_columns.pop()
+input_data_char_columns = [col for col in zip(*input_data)]
+while input_data_char_columns:
+    column = input_data_char_columns.pop()
     if ''.join(column).strip() == '':
         problems_cephalopod_form.append(list())
     else:
         problems_cephalopod_form[-1].append(''.join(column[:-1]))
-        if column[-1] != ' ': problems_cephalopod_form[-1].append(column[-1])
+    if column[-1] != ' ': problems_cephalopod_form[-1].append(column[-1])
 solutions_cephalopod_form = \
-    [operation(y[-1])(list(map(int,y[:-1])))  for y in problems_cephalopod_form]
+    [operation(pr[-1])(list(map(int,pr[:-1]))) for pr in problems_cephalopod_form]
 
 answers = {
     'What is the grand total of all of the answers?:': 
