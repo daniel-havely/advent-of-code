@@ -1,10 +1,7 @@
 import networkx as nx
-import matplotlib
-import matplotlib.pyplot as plt
 
 with open("input.txt","r") as input_file:
     input_data =  input_file.readlines()
-
 
 tachyon_flow = nx.DiGraph()
 tachyon_beam_in_column = [set() for i in range(len(input_data[0].strip()))]
@@ -50,7 +47,6 @@ output_paths = [
     for nod, att in tachyon_flow.nodes(data=True)
     if att['node_type']=='Output'
 ]
-
 
 answers = {
     'How many times will the beam be split?:': 
