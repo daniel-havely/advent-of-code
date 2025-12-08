@@ -1,17 +1,7 @@
 import math
 
 with open("input.txt","r") as input_file:
-    input_data =  input_file.readlines()
-
-def connectCircuits(connection, circuits):
-    new_circuit = set()
-    for box in connection:
-        for circ_ix, circ in enumerate(circuits):
-            if box in circ:
-                new_circuit.update(circ)
-                del circuits[circ_ix]
-                break
-    circuits.append(new_circuit)
+    input_data = input_file.readlines()
 
 junction_box_positions = [tuple(map(int,line.split(','))) for line in input_data]
 
@@ -25,7 +15,14 @@ connections.sort(key=lambda x: math.dist(*x))
 circuits = [{box} for box in junction_box_positions]
 
 for iteration, connection in enumerate(connections, start=1):
-    connectCircuits(connection, circuits)
+    new_circuit = set()
+    for box in connection:
+        for circ_ix, circ in enumerate(circuits):
+            if box in circ:
+                new_circuit.update(circ)
+                del circuits[circ_ix]
+                break
+    circuits.append(new_circuit)
     if iteration == 1000:
         circuits.sort(key=len, reverse=True)
         circuits_after_1000_connections = circuits.copy()
