@@ -1,8 +1,6 @@
 import regex as re
 import numpy as np
-import itertools
 from tqdm import tqdm
-import math
 
 with open("input.txt","r") as input_file:
     input_data =  input_file.read()
@@ -16,22 +14,6 @@ machine_data = [
     for light_str, button_str, joltage_str 
     in re.findall(r'\[(.*)\] (\(.*\)) \{(.*)\}', input_data)
 ]
-
-def genCombo(but_ranges, but_jolts, total_jolts, base=True):
-    if len(but_ranges) > 1: 
-        but_ranges = but_ranges.copy()
-        current_range = but_ranges.pop()
-        but_jolts = but_jolts.copy()
-        current_jolts = but_jolts.pop()
-        
-        return [
-            ([*result, a], joltage + (a*current_jolts))
-            for a in (tqdm(current_range) if base else current_range)
-            for result, joltage in (genCombo(but_ranges, but_jolts, total_jolts, False ))
-            if joltage < total_jolts
-            ]
-    else:
-        return  (([r], r*but_jolts[0]) for r in but_ranges[0])
 
 class Machine:
     def __init__(self, light_data, button_data, joltage_data):
@@ -60,10 +42,8 @@ class Machine:
     
     def getButtonPushesForJoltages(self):
         if all(n == 0 for n in self.joltage_data):
-            # print(self.light_data, 'Solution!')
             return [[0 for b in self.button_data],]
         else:
-            # print(self.joltage_data)
             target_vector = np.array(list(map(lambda x: x%2, self.joltage_data)))
             operator_matrix = np.array([
                 [int(j in i) for j in range(len(target_vector))] for i in self.button_data
@@ -79,12 +59,9 @@ class Machine:
 
             new_machine_data = [
                 (input, [x-y for x,y in zip(self.joltage_data, output)])
-                # (input, self.joltage_data, output)
                 for input, output, correct in zip(input_vectors, output_vectors, correct_output)
                 if correct
             ]
-
-            # return new_machine_data
 
             return [
                 [
@@ -100,10 +77,7 @@ class Machine:
                         ).getButtonPushesForJoltages()
             ]
 
-
 machines = [Machine(*data) for data in machine_data]
-
-# test = machines[29].getButtonPushesForJoltages()
 
 answers = {
     'Fewest button presses required to configure the idicator lights on all of the machines?:': 
